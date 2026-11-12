@@ -1,0 +1,475 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>পাবলিক ক্যাব ডট অনলাইন - Public Cab Online</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Hind+Siliguri:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        body { font-family: 'Hind Siliguri', sans-serif; }
+        @keyframes pulse-border {
+            0%, 100% { border-color: rgba(16, 185, 129, 0.4); box-shadow: 0 0 25px rgba(16, 185, 129, 0.2); }
+            50% { border-color: rgba(16, 185, 129, 0.9); box-shadow: 0 0 45px rgba(16, 185, 129, 0.5); }
+        }
+        .active-card { animation: pulse-border 2.5s infinite; }
+    </style>
+</head>
+<body class="bg-slate-950 text-slate-100 min-h-screen flex flex-col justify-between selection:bg-emerald-500 selection:text-slate-950">
+
+    <!-- ওয়েলকাম স্ক্রিন -->
+    <div id="welcomeOverlay" class="fixed inset-0 bg-slate-950/95 backdrop-blur-md z-50 flex items-center justify-center p-4">
+        <div class="bg-slate-900 border border-emerald-500/40 rounded-3xl p-6 md:p-8 max-w-md w-full text-center shadow-2xl space-y-6 active-card">
+            <div class="w-20 h-20 bg-emerald-500/20 text-emerald-400 rounded-full flex items-center justify-center mx-auto text-4xl shadow-inner">
+                📢
+            </div>
+            <div>
+                <span class="bg-emerald-500/15 text-emerald-400 text-xs font-bold px-3 py-1 rounded-full border border-emerald-500/30">
+                    পুরুষ ও নারী যুগল কণ্ঠের প্রফেশনাল ঘোষণা
+                </span>
+                <h1 class="text-2xl md:text-3xl font-bold text-white mt-3">পাবলিক ক্যাব ডট অনলাইন</h1>
+                <p class="text-slate-300 text-sm mt-2 leading-relaxed">
+                    গ্রাম ও মফস্বলের মানুষের জন্য গাড়ি বুকিং, পার্সেল ডেলিভারি, মেকানিক ও লিফলেট স্ক্যান করে অ্যাপ ডাউনলোডের সম্পূর্ণ তথ্য শুনুন।
+                </p>
+            </div>
+
+            <button onclick="startAd()" class="w-full bg-gradient-to-r from-emerald-500 to-teal-500 hover:from-emerald-400 hover:to-teal-400 text-slate-950 font-extrabold py-4 rounded-2xl shadow-lg transition-all text-lg flex items-center justify-center gap-2 cursor-pointer">
+                <span>🎶 বিজ্ঞাপন ও মিউজিক চালু করুন</span>
+            </button>
+        </div>
+    </div>
+
+    <!-- হেডার বার -->
+    <header class="bg-slate-900/90 backdrop-blur border-b border-slate-800 px-4 py-3 sticky top-0 z-40 flex flex-wrap justify-between items-center gap-3">
+        <div class="flex items-center gap-3">
+            <div class="w-10 h-10 bg-emerald-500 text-slate-950 font-black text-xl rounded-xl flex items-center justify-center shadow">PC</div>
+            <div>
+                <h2 class="font-bold text-emerald-400 text-lg leading-tight">পাবলিক ক্যাব ডট অনলাইন</h2>
+                <p class="text-xs text-slate-400">ওয়েবসাইট: <span class="text-white font-semibold">publiccab.online</span></p>
+            </div>
+        </div>
+        <div class="flex items-center gap-2">
+            <button onclick="recordAndDownloadFullAd()" id="recordBtn" class="bg-amber-500/20 hover:bg-amber-500/30 text-amber-300 px-3.5 py-1.5 rounded-lg text-xs font-bold border border-amber-500/40 transition cursor-pointer flex items-center gap-1.5">
+                🎙️ ভয়েস ও মিউজিক রেকর্ড ডাউনলোড
+            </button>
+            <button onclick="togglePlayPause()" id="playPauseBtn" class="bg-emerald-500 hover:bg-emerald-400 text-slate-950 px-4 py-1.5 rounded-lg text-xs font-bold transition cursor-pointer">
+                ⏸ বিরতি
+            </button>
+        </div>
+    </header>
+
+    <!-- মূল বিজ্ঞাপন বোর্ড -->
+    <main class="max-w-4xl mx-auto p-4 w-full my-auto space-y-6">
+        
+        <!-- লাইভ ভয়েস ও স্লাইড ডিসপ্লে -->
+        <div class="bg-slate-900 border border-emerald-500/30 rounded-3xl p-6 md:p-10 text-center shadow-2xl relative overflow-hidden active-card">
+            <div class="flex justify-center items-center gap-2 mb-4">
+                <span class="bg-slate-800 text-emerald-400 text-xs font-bold px-3 py-1 rounded-full" id="chapterTag">
+                    পর্ব ১ / ৭
+                </span>
+                <span class="bg-indigo-500/20 text-indigo-300 border border-indigo-500/30 text-xs font-bold px-3 py-1 rounded-full" id="speakerTag">
+                    👨 পুরুষ কণ্ঠ বলছেন...
+                </span>
+            </div>
+
+            <div id="slideIcon" class="text-6xl md:text-7xl mb-4 transition-transform duration-500">🌾</div>
+            <h3 id="slideTitle" class="text-2xl md:text-3xl font-bold text-white mb-3 leading-snug">
+                গ্রাম ও মফস্বল এলাকায় এই প্রথম ডিজিটাল গাড়ি ও পার্সেল পরিষেবা!
+            </h3>
+            <p id="liveSubtitle" class="text-emerald-300 text-base md:text-lg font-medium max-w-2xl mx-auto leading-relaxed bg-slate-950/60 p-4 rounded-2xl border border-slate-800">
+                "নমস্কার! ওহে গ্রামবাসী ভাই ও বোনেরা, একটু কান পেতে শুনে যান..."
+            </p>
+
+            <!-- প্রোগ্রেস বার -->
+            <div class="w-full bg-slate-800 h-2.5 rounded-full mt-6 overflow-hidden">
+                <div id="progressBar" class="bg-gradient-to-r from-emerald-500 to-teal-400 h-full w-1/7 transition-all duration-700"></div>
+            </div>
+        </div>
+
+        <!-- গুরুত্বপূর্ণ ৬টি পরিষেবা কার্ড -->
+        <div class="grid grid-cols-2 md:grid-cols-3 gap-3">
+            <div class="bg-slate-900/80 border border-slate-800 p-4 rounded-2xl flex items-center gap-3">
+                <span class="text-2xl">🛺</span>
+                <div>
+                    <h4 class="text-sm font-bold text-white">সব গাড়ি বুকিং</h4>
+                    <p class="text-xs text-slate-400">টোটো, বাইক, অটো, চারচাকা, লরি ও অ্যাম্বুলেন্স</p>
+                </div>
+            </div>
+            <div class="bg-slate-900/80 border border-slate-800 p-4 rounded-2xl flex items-center gap-3">
+                <span class="text-2xl">🔧</span>
+                <div>
+                    <h4 class="text-sm font-bold text-white">বাড়িতে মেকানিক</h4>
+                    <p class="text-xs text-slate-400">ক্যাটাগরি দেখে এক কলেই মিস্ত্রি</p>
+                </div>
+            </div>
+            <div class="bg-slate-900/80 border border-slate-800 p-4 rounded-2xl flex items-center gap-3">
+                <span class="text-2xl">🛍️</span>
+                <div>
+                    <h4 class="text-sm font-bold text-white">দোকান থেকে অর্ডার</h4>
+                    <p class="text-xs text-slate-400">ছবি দেখে অর্ডার ও পার্সেল বুকিং বাধ্যতামূলক</p>
+                </div>
+            </div>
+            <div class="bg-slate-900/80 border border-slate-800 p-4 rounded-2xl flex items-center gap-3">
+                <span class="text-2xl">📱</span>
+                <div>
+                    <h4 class="text-sm font-bold text-white">লিফলেট QR স্ক্যান</h4>
+                    <p class="text-xs text-slate-400">গুগলে স্ক্যান করে ওয়েবসাইট ও অ্যাপ ডাউনলোড</p>
+                </div>
+            </div>
+            <div class="bg-slate-900/80 border border-slate-800 p-4 rounded-2xl flex items-center gap-3">
+                <span class="text-2xl">🛵</span>
+                <div>
+                    <h4 class="text-sm font-bold text-white">ড্রাইভার রেজিস্ট্রেশন</h4>
+                    <p class="text-xs text-slate-400">ঘরে বসে রেজিস্ট্রেশন, ০% কমিশন</p>
+                </div>
+            </div>
+            <div class="bg-slate-900/80 border border-slate-800 p-4 rounded-2xl flex items-center gap-3">
+                <span class="text-2xl">🎧</span>
+                <div>
+                    <h4 class="text-sm font-bold text-white">২৪ ঘণ্টা সাপোর্ট</h4>
+                    <p class="text-xs text-slate-400">যেকোনো সমস্যায় সরাসরি অ্যাপ সাপোর্ট</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- লিফলেট ও অ্যাপ ডাউনলোড নির্দেশিকা -->
+        <div class="bg-gradient-to-r from-emerald-950 to-slate-900 border border-emerald-500/40 rounded-2xl p-5 flex flex-col md:flex-row items-center justify-between gap-4">
+            <div class="text-center md:text-left">
+                <h4 class="text-base font-bold text-emerald-400">লিফলেটের স্ক্যানার বা গুগল থেকে যেভাবে অ্যাপ পাবেন:</h4>
+                <p class="text-xs md:text-sm text-slate-300 mt-1">
+                    আপনার হাতের লিফলেটের স্ক্যানারটি গুগল থেকে স্ক্যান করুন অথবা গুগলে লিখুন <span class="bg-slate-950 text-emerald-300 font-bold px-2 py-0.5 rounded border border-emerald-500/30">পাবলিক ক্যাব ডট অনলাইন</span> — ওয়েবসাইটে ঢুকেই ডাউনলোড বাটনে ক্লিক করে অ্যাপটি ডাউনলোড করুন।
+                </p>
+            </div>
+            <button onclick="restartAd()" class="bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-bold px-5 py-2.5 rounded-xl text-sm whitespace-nowrap transition cursor-pointer">
+                🔄 আবার শুনুন
+            </button>
+        </div>
+
+    </main>
+
+    <footer class="bg-slate-900 border-t border-slate-800 py-3 px-4 text-center text-xs text-slate-400">
+        পাবলিক ক্যাব ডট অনলাইন • সম্পূর্ণ কাস্টমার ও ড্রাইভার পরিষেবা • ০% কমিশন
+    </footer>
+
+    <script>
+        let audioCtx = null;
+        let musicInterval = null;
+        let masterGain = null;
+        let isPlaying = false;
+        let currentChapterIdx = 0;
+        let mediaRecorder = null;
+        let recordedChunks = [];
+
+        // ছেলে ও মেয়ের যুগল কণ্ঠের সম্পূর্ণ স্ক্রিপ্ট (স্পষ্ট বাংলা উচ্চারণসহ)
+        const fullScript = [
+            {
+                tag: "পর্ব ১ / ৭ • বিশেষ ঘোষণা",
+                icon: "🌾",
+                title: "ওহে গ্রামবাসী ভাই ও বোনেরা, একটু কান পেতে শুনে যান!",
+                lines: [
+                    { role: "male", text: "নমস্কার! ওহে গ্রামবাসী ভাই ও বোনেরা, একটু কান পেতে শুনে যান!" },
+                    { role: "female", text: "আগে কখনো আমাদের গ্রামে এমন ডিজিটাল ব্যবস্থা আসেনি।" },
+                    { role: "male", text: "এখন থেকে আর রাস্তায় দাঁড়িয়ে গাড়ির জন্য অপেক্ষা করতে হবে না। এক ক্লিকেই গাড়ি পৌঁছে যাবে আপনার ঘরের দরজায়!" },
+                    { role: "female", text: "আপনাদের এলাকায় চলে এসেছে, পাবলিক ক্যাব, ডট অনলাইন!" }
+                ]
+            },
+            {
+                tag: "পর্ব ২ / ৭ • সব গাড়ি বুকিং ও পার্সেল",
+                icon: "🚕",
+                title: "টোটো, বাইক, অটো, চারচাকা, লরি ও জরুরি অ্যাম্বুলেন্স বুকিং!",
+                lines: [
+                    { role: "male", text: "এখন ঘরে বসেই মোবাইল থেকে বুক করতে পারবেন সব ধরনের গাড়ি। যেমন— টোটো, বাইক, অটো, চারচাকা গাড়ি, মালবাহী লরি এবং চব্বিশ ঘণ্টার জরুরি অ্যাম্বুলেন্স।" },
+                    { role: "female", text: "সাথে থাকছে লাইভ জিপিএস ট্র্যাকিং সিস্টেম! ঘরের দরজা থেকে পিকআপ, আর সোজা গন্তব্যের দরজায় ড্রপ।" },
+                    { role: "male", text: "এছাড়া পার্সেল বুকিং করে এক জায়গা থেকে অন্য জায়গায় মালপত্র পাঠাতে বা আনতে পারবেন খুব সহজেই।" }
+                ]
+            },
+            {
+                tag: "পর্ব ৩ / ৭ • মেকানিক কল সার্ভিস",
+                icon: "🔧",
+                title: "এক কলেই বাড়িতে ডেকে নিন যেকোনো মেকানিক!",
+                lines: [
+                    { role: "female", text: "বাড়িতে বা গাড়িতে কোনো মিস্ত্রি দরকার? এখন সব ধরনের মেকানিক পাবেন আমাদের অ্যাপে।" },
+                    { role: "male", text: "কী মেকানিক দরকার সেই ক্যাটাগরি বেছে নিন, আর লিস্ট থেকে কল বাটনে ক্লিক করে সরাসরি মেকানিকের সাথে কথা বলে নিজের বাড়িতে কাজের জন্য ডেকে নিন।" }
+                ]
+            },
+            {
+                tag: "পর্ব ৪ / ৭ • দোকান থেকে অর্ডার ও পার্সেল বুকিং",
+                icon: "🛍️",
+                title: "দোকান থেকে মাল অর্ডার করার পর পার্সেল বুকিং করুন!",
+                lines: [
+                    { role: "female", text: "ঘরে বসেই অ্যাপ্লিকেশনের মাধ্যমে দেখতে পাবেন আপনার কাছাকাছি কী কী দোকান আছে, দোকান কতদূরে এবং দোকানের আসল ছবি।" },
+                    { role: "male", text: "সরাসরি দোকানের জিপিএস লোকেশন দেখে কল বাটনে ক্লিক করে দোকানদারের সাথে কথা বলে যেকোনো জিনিস অর্ডার করুন।" },
+                    { role: "female", text: "তবে হ্যাঁ, দোকানদারের কাছে মালপত্র অর্ডার করার পর অবশ্যই আমাদের অ্যাপে গিয়ে দোকান এবং আপনার নিজস্ব লোকেশন দিয়ে পার্সেল বুকিং করতে হবে।" },
+                    { role: "male", text: "পার্সেল বুকিং না করালে ডেলিভারি হবে না! আপনি পার্সেল বুকিং করলেই আমাদের কোম্পানি সম্পূর্ণ দায়িত্ব নিয়ে সেই দোকান থেকে আপনার পছন্দ করা জিনিস আপনার ঘরের দরজায় পৌঁছে দেবে।" }
+                ]
+            },
+            {
+                tag: "পর্ব ৫ / ৭ • ড্রাইভার ভাইদের জন্য ০% কমিশন",
+                icon: "🛵",
+                title: "সব গাড়ির ড্রাইভার ভাইয়েরা—ঘরে বসেই রেজিস্ট্রেশন করুন!",
+                lines: [
+                    { role: "male", text: "এবার আমাদের এলাকার সকল ড্রাইভার ভাইদের জন্য দারুণ খবর!" },
+                    { role: "female", text: "আপনি টোটো, অটো, বাইক, চারচাকা গাড়ি, লরি কিংবা জরুরি অ্যাম্বুলেন্স—যাই চালান না কেন, আজই যুক্ত হোন পাবলিক ক্যাব, ডট অনলাইনে।" },
+                    { role: "male", text: "কোথাও অফিসে যাওয়া লাগবে না! ঘর থেকেই ড্রাইভার রেজিস্ট্রেশন ফর্ম পূরণ করুন। ভেরিফিকেশন শেষ হলেই রাইড শুরু করতে পারবেন।" },
+                    { role: "female", text: "সবচেয়ে বড় সুবিধা হলো—এখানে একদম জিরো কমিশন! কোম্পানিকে কোনো টাকা দিতে হবে না, আয়ের পুরো টাকাটাই আপনার।" }
+                ]
+            },
+            {
+                tag: "পর্ব ৬ / ৭ • লিফলেট স্ক্যানার ও অ্যাপ ডাউনলোড",
+                icon: "📱",
+                title: "লিফলেটের স্ক্যানার স্ক্যান করুন ও অ্যাপ ডাউনলোড করুন!",
+                lines: [
+                    { role: "male", text: "আপনাদের হাতে যে লিফলেটটি দেওয়া হচ্ছে, তার মধ্যে আমাদের কোম্পানির নাম এবং ওয়েবসাইটের নাম দেওয়া আছে, আর সাথে একটি স্ক্যানার দেওয়া আছে।" },
+                    { role: "female", text: "মোবাইল বা গুগল থেকে সেই স্ক্যানারটি স্ক্যান করলেই সঙ্গে সঙ্গে পৌঁছে যাবেন আমাদের ওয়েবসাইট—পাবলিক ক্যাব, ডট অনলাইনে।" },
+                    { role: "male", text: "ওয়েবসাইটে যাওয়ার পরেই ডাউনলোড বাটন দেখতে পাবেন। সেখানে ক্লিক করে অ্যাপটি ডাউনলোড করে কাস্টমার এবং ড্রাইভার সবাই সম্পূর্ণভাবে ব্যবহার করতে পারবেন।" }
+                ]
+            },
+            {
+                tag: "পর্ব ৭ / ৭ • সাপোর্ট ও সমাপ্তি",
+                icon: "🌟",
+                title: "যেকোনো সমস্যায় সাপোর্টে কথা বলুন — পাবলিক ক্যাব ডট অনলাইন!",
+                lines: [
+                    { role: "female", text: "আর কোনো রকম সমস্যা বা অসুবিধা হলে আমাদের অ্যাপ্লিকেশনে গিয়ে সাপোর্ট অপশনে সরাসরি কথা বলে নিন।" },
+                    { role: "male", text: "তাই আর দেরি না করে আজই লিফলেট স্ক্যান করুন অথবা গুগলে সার্চ করুন—পাবলিক ক্যাব, ডট অনলাইন! নমস্কার!" }
+                ]
+            }
+        ];
+
+        function startAd() {
+            document.getElementById('welcomeOverlay').style.display = 'none';
+            startMelodicMusic();
+            isPlaying = true;
+            currentChapterIdx = 0;
+            playChapter(0);
+        }
+
+        function restartAd() {
+            window.speechSynthesis.cancel();
+            isPlaying = true;
+            document.getElementById('playPauseBtn').innerText = "⏸ বিরতি";
+            currentChapterIdx = 0;
+            playChapter(0);
+        }
+
+        // মিষ্টি হারমোনিক প্যাড ও রিদমিক গানের ব্যাকগ্রাউন্ড মিউজিক (কোনো কর্কশ শব্দ নয়)
+        function startMelodicMusic() {
+            if (!audioCtx) {
+                audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+            }
+            if (audioCtx.state === 'suspended') {
+                audioCtx.resume();
+            }
+            if (musicInterval) clearInterval(musicInterval);
+
+            masterGain = audioCtx.createGain();
+            masterGain.gain.value = 0.14;
+            masterGain.connect(audioCtx.destination);
+
+            // সুন্দর গানের কর্ড প্রগ্রেশন (C Major -> A Minor -> F Major -> G Major)
+            const chords = [
+                [261.63, 329.63, 392.00], // C
+                [220.00, 261.63, 329.63], // Am
+                [174.61, 220.00, 261.63], // F
+                [196.00, 246.94, 293.66]  // G
+            ];
+            let beat = 0;
+
+            musicInterval = setInterval(() => {
+                if (!isPlaying) return;
+                const chord = chords[Math.floor(beat / 4) % chords.length];
+                const noteFreq = chord[beat % chord.length];
+                playSoftMelodyTone(noteFreq, 1.4, beat % 4 === 0);
+                beat++;
+            }, 650);
+        }
+
+        function playSoftMelodyTone(freq, duration, isBassRoot) {
+            try {
+                const now = audioCtx.currentTime;
+                const osc = audioCtx.createOscillator();
+                const filter = audioCtx.createBiquadFilter();
+                const gain = audioCtx.createGain();
+
+                // নরম হারমোনিয়াম/সিন্থ প্যাড সাউন্ড
+                osc.type = isBassRoot ? 'triangle' : 'sine';
+                osc.frequency.setValueAtTime(isBassRoot ? freq / 2 : freq, now);
+
+                filter.type = 'lowpass';
+                filter.frequency.setValueAtTime(800, now);
+
+                gain.gain.setValueAtTime(0.001, now);
+                gain.gain.linearRampToValueAtTime(isBassRoot ? 0.22 : 0.14, now + 0.25);
+                gain.gain.exponentialRampToValueAtTime(0.001, now + duration);
+
+                osc.connect(filter);
+                filter.connect(gain);
+                gain.connect(masterGain);
+
+                osc.start(now);
+                osc.stop(now + duration);
+            } catch (e) {}
+        }
+
+        // কথা বলার সময় মিউজিক হালকা হবে, বিরতিতে সুর ভেসে উঠবে
+        function duckMusic(speaking) {
+            if (masterGain && audioCtx) {
+                masterGain.gain.setTargetAtTime(speaking ? 0.045 : 0.16, audioCtx.currentTime, 0.35);
+            }
+        }
+
+        function playChapter(idx) {
+            if (!isPlaying || idx >= fullScript.length) {
+                if (idx >= fullScript.length) {
+                    duckMusic(false);
+                    if (mediaRecorder && mediaRecorder.state === "recording") {
+                        setTimeout(() => mediaRecorder.stop(), 1500);
+                    }
+                }
+                return;
+            }
+
+            currentChapterIdx = idx;
+            const chap = fullScript[idx];
+
+            document.getElementById('chapterTag').innerText = chap.tag;
+            document.getElementById('slideIcon').innerText = chap.icon;
+            document.getElementById('slideTitle').innerText = chap.title;
+            document.getElementById('progressBar').style.width = `${((idx + 1) / fullScript.length) * 100}%`;
+
+            duckMusic(false);
+            setTimeout(() => {
+                if (!isPlaying) return;
+                speakLines(chap.lines, 0, () => {
+                    setTimeout(() => {
+                        if (isPlaying) playChapter(idx + 1);
+                    }, 900);
+                });
+            }, 1100);
+        }
+
+        // ছেলে ও মেয়ে দুজনের গলাতেই স্পষ্টভাবে পালা করে বলানো
+        function speakLines(lines, lineIdx, doneCallback) {
+            if (!isPlaying) return;
+            if (lineIdx >= lines.length) {
+                duckMusic(false);
+                doneCallback();
+                return;
+            }
+
+            duckMusic(true);
+            const item = lines[lineIdx];
+            document.getElementById('liveSubtitle').innerText = `"${item.text}"`;
+
+            const speakerBadge = document.getElementById('speakerTag');
+            const utterance = new SpeechSynthesisUtterance(item.text);
+            utterance.lang = 'bn-IN';
+
+            const voices = window.speechSynthesis.getVoices();
+            const bnVoices = voices.filter(v => v.lang.includes('bn') || v.lang.includes('ben'));
+
+            if (item.role === 'male') {
+                speakerBadge.innerText = "👨 পুরুষ কণ্ঠ বলছেন...";
+                speakerBadge.className = "bg-blue-500/20 text-blue-300 border border-blue-500/30 text-xs font-bold px-3 py-1 rounded-full";
+                if (bnVoices.length > 1) {
+                    utterance.voice = bnVoices.find(v => /male|ravi|bhaskar|man/i.test(v.name)) || bnVoices[bnVoices.length - 1];
+                } else if (bnVoices.length === 1) {
+                    utterance.voice = bnVoices[0];
+                }
+                utterance.pitch = 0.72; // গম্ভীর ও স্পষ্ট পুরুষ কণ্ঠ
+                utterance.rate = 0.88;
+            } else {
+                speakerBadge.innerText = "👩 নারী কণ্ঠ বলছেন...";
+                speakerBadge.className = "bg-pink-500/20 text-pink-300 border border-pink-500/30 text-xs font-bold px-3 py-1 rounded-full";
+                if (bnVoices.length > 0) {
+                    utterance.voice = bnVoices.find(v => /female|lekha|tania|kalpana|women/i.test(v.name)) || bnVoices[0];
+                }
+                utterance.pitch = 1.24; // মিষ্টি ও স্পষ্ট নারী কণ্ঠ
+                utterance.rate = 0.90;
+            }
+
+            utterance.onend = () => {
+                setTimeout(() => {
+                    speakLines(lines, lineIdx + 1, doneCallback);
+                }, 450);
+            };
+
+            utterance.onerror = () => {
+                speakLines(lines, lineIdx + 1, doneCallback);
+            };
+
+            window.speechSynthesis.speak(utterance);
+        }
+
+        function togglePlayPause() {
+            const btn = document.getElementById('playPauseBtn');
+            if (isPlaying) {
+                isPlaying = false;
+                window.speechSynthesis.pause();
+                if (audioCtx) audioCtx.suspend();
+                btn.innerText = "▶ চালু করুন";
+            } else {
+                isPlaying = true;
+                if (audioCtx) audioCtx.resume();
+                if (window.speechSynthesis.paused) {
+                    window.speechSynthesis.resume();
+                } else {
+                    playChapter(currentChapterIdx);
+                }
+                btn.innerText = "⏸ বিরতি";
+            }
+        }
+
+        // সম্পূর্ণ ভয়েস + মিউজিক একসাথে রেকর্ড করে অডিও ফাইল ডাউনলোড
+        async function recordAndDownloadFullAd() {
+            const btn = document.getElementById('recordBtn');
+            try {
+                alert("পরের স্ক্রিনে এই ট্যাবটি (This Tab) সিলেক্ট করে 'Share system audio / ট্যাব অডিও' অন করে দিন। পুরো বিজ্ঞাপনটি শুরু থেকে শেষ পর্যন্ত ভয়েস ও মিউজিকসহ রেকর্ড হয়ে অটোমেটিক ডাউনলোড হয়ে যাবে!");
+                const stream = await navigator.mediaDevices.getDisplayMedia({
+                    video: true,
+                    audio: true
+                });
+
+                const audioTracks = stream.getAudioTracks();
+                if (audioTracks.length === 0) {
+                    alert("দয়া করে শেয়ার করার সময় 'Share tab audio' অপশনটি চালু করুন যাতে ভয়েস ও মিউজিক রেকর্ড হয়।");
+                    stream.getTracks().forEach(t => t.stop());
+                    return;
+                }
+
+                const audioStream = new MediaStream(audioTracks);
+                mediaRecorder = new MediaRecorder(audioStream);
+                recordedChunks = [];
+
+                mediaRecorder.ondataavailable = (e) => {
+                    if (e.data.size > 0) recordedChunks.push(e.data);
+                };
+
+                mediaRecorder.onstop = () => {
+                    const blob = new Blob(recordedChunks, { type: 'audio/webm' });
+                    const url = URL.createObjectURL(blob);
+                    const a = document.createElement('a');
+                    a.href = url;
+                    a.download = 'Public_Cab_Online_Full_Advertisement.webm';
+                    a.click();
+                    URL.revokeObjectURL(url);
+                    stream.getTracks().forEach(t => t.stop());
+                    btn.innerText = "🎙️ ভয়েস ও মিউজিক রেকর্ড ডাউনলোড";
+                };
+
+                mediaRecorder.start();
+                btn.innerText = "🔴 রেকর্ডিং চলছে... (শেষ হলে অটো ডাউনলোড হবে)";
+                
+                // শুরু থেকে পুরো বিজ্ঞাপন প্লে করা
+                document.getElementById('welcomeOverlay').style.display = 'none';
+                startMelodicMusic();
+                restartAd();
+
+            } catch (err) {
+                console.log(err);
+            }
+        }
+
+        window.speechSynthesis.onvoiceschanged = () => { window.speechSynthesis.getVoices(); };
+    </script>
+</body>
+</html>
